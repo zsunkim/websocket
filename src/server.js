@@ -15,14 +15,20 @@ const handleListen = () => console.log(`Listening on http://localhost:3000`);
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
+function onSocketClose() {
+  console.log("Disconnected from the Browser");
+}
+
+const sockets = [];
+
 // backend에 연결된 사람의 정보 제공 (socket)
 wss.on("connection", (socket) => { // connection이 생겼을 때 socket으로 즉시 메세지 보내기
-  console.log("Connected to Browser");
-  socket.on("close", () => console.log("Disconnected from the Browser"));
+  sockets.push(socket);
+  console.log("Connected to Browser ✅");
+  socket.on("close", onSocketClose);
   socket.on("message", (message) => {
-    console.log(message.toString('utf-8'));
+    sockets.forEach((aSocket) => aSocket.send(message));
   });
-  socket.send("hello!!!"); // socket으로 메세지 보내기
 });
 
 server.listen(3000, handleListen);
