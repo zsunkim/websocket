@@ -1,3 +1,5 @@
+const messageList = document.querySelector("ul");
+const messageForm = document.querySelector("form");
 const socket = new WebSocket(`ws://${window.location.host}`);
 
 // socker open event // connection이 open되면 메소드 실행
@@ -15,6 +17,11 @@ socket.addEventListener("close", () => {
   console.log("Disconnected to Server");
 })
 
-setTimeout(() => {
-  socket.send("hello");
-}, 10000)
+function handleSubmit(event) {
+  event.preventDefault();
+  const input = messageForm.querySelector("input");
+  socket.send(input.value);
+  input.value = "";
+}
+
+messageForm.addEventListener("submit", handleSubmit);
