@@ -24,7 +24,7 @@ const sockets = [];
 // backend에 연결된 사람의 정보 제공 (socket)
 wss.on("connection", (socket) => { // connection이 생겼을 때 socket으로 즉시 메세지 보내기
   sockets.push(socket);
-  console.log("Connected to Browser ✅");
+  console.log("Connected to Browser");
   socket.on("close", onSocketClose);
   socket.on("message", (message) => {
     sockets.forEach((aSocket) => aSocket.send(message));
