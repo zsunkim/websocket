@@ -23,11 +23,18 @@ const sockets = [];
 
 // backend에 연결된 사람의 정보 제공 (socket)
 wss.on("connection", (socket) => { // connection이 생겼을 때 socket으로 즉시 메세지 보내기
+  socket["nickname"] = "Anon";
   sockets.push(socket);
   console.log("Connected to Browser");
   socket.on("close", onSocketClose);
-  socket.on("message", (message) => {
-    sockets.forEach((aSocket) => aSocket.send(message));
+  socket.on("message", (msg) => {
+    const message = JSON.parse(msg); // string ->javascript object로 변환
+    switch (message.type) {
+      case "new_message":
+        sockets.forEach((aSocket) => aSocket.send(`${socket.nickname}: ${message.payload}`));
+      case "nickname":
+        socket["nickname"] = message.payload;
+    }
   });
 });
 
