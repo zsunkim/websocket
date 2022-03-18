@@ -15,11 +15,11 @@ const httpServer = http.createServer(app);
 const wsServer = SocketIO(httpServer);
 
 wsServer.on("connection", (socket) => {
-  socket.on("enter_room", (msg, done) => {
-    console.log(msg); // 받은 메세지 출력
+  socket.on("enter_room", (roomName, done) => {
+    console.log(roomName); // 받은 메세지 출력
     setTimeout(() => {
-      done(); // socket.emit()의 함수 호출
-    }, 10000);
+      done("hello from the backend"); // socket.emit()의 함수 호출
+    }, 15000);
   });
 });
 
